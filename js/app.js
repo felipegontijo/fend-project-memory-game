@@ -40,6 +40,12 @@ function shuffle(array) {
 // get the entire deck of cards
 const deck = document.querySelector('.deck');
 
+// create an array to hold the cards that are open
+const openCards = [];
+function addToOpenCards (card) {
+    openCards.push(card);
+}
+
 // flips the card
 function flipCard (card) {
     card.classList.toggle('open');
@@ -52,4 +58,6 @@ deck.addEventListener('click', function(e) {
     const card = e.target;
     //flips the card
     flipCard(card);
+    // add to openCards
+    addToOpenCards(card);
 })
