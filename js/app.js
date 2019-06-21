@@ -39,25 +39,54 @@ function shuffle(array) {
 
 // get the entire deck of cards
 const deck = document.querySelector('.deck');
+console.log(deck);
 
 // create an array to hold the cards that are open
-const openCards = [];
+let openCards = [];
+
+// adds a card to the openCards array
 function addToOpenCards (card) {
     openCards.push(card);
 }
 
 // flips the card
 function flipCard (card) {
-    card.classList.toggle('open');
-    card.classList.toggle('show');
+    // if target clicked isn't our li.card -- don't toggle open & show
+    if (!card.classList.contains('card')) return;
+    // card.classList.toggle('open');
+    // card.classList.toggle('show');
+
+    if (!card.classList.contains('open') && !card.classList.contains('show')) {
+        card.classList.add('open', 'show');
+    } else {
+        card.classList.remove('open', 'show');
+    }
+
 }
 
 // adds an event listener to the deck
 deck.addEventListener('click', function(e) {
-    // defines card as what triggered the event
-    const card = e.target;
-    //flips the card
-    flipCard(card);
-    // add to openCards
-    addToOpenCards(card);
-})
+    if (e.target.classList.contains('card')) {
+        const card = e.target;
+        if (!card.classList.contains('open') && !card.classList.contains('show') && !card.classList.contains('match')) {
+            // flip the card
+            // flipCard(card);
+            // add to openCards
+            // addToOpenCards(card);
+
+            card.classList.add('open', 'show');
+            openCards.push(card);
+
+            if (openCards.length === 2) {
+                setTimeout(function(card) {
+                    // openCards.forEach(flipCard(card));
+                    openCards.forEach(function(card) {
+                        card.classList.remove('open', 'show');
+                    })
+                    openCards = [];
+                }, 1000);
+            }
+
+        }
+    }
+});
