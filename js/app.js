@@ -53,7 +53,7 @@ function beginGame (deck) {
 beginGame(deck);
 
 // hold the cards that are currently open -- but not matched
-const openCards = [];
+let openCards = [];
 
 /**
  * @description Pushes a card to the openCards array
