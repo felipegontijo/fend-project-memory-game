@@ -2,7 +2,6 @@
  * Create a list that holds all of your cards
 */
 
-
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -78,13 +77,23 @@ deck.addEventListener('click', function(e) {
             openCards.push(card);
 
             if (openCards.length === 2) {
-                setTimeout(function(card) {
-                    // openCards.forEach(flipCard(card));
-                    openCards.forEach(function(card) {
-                        card.classList.remove('open', 'show');
-                    })
+
+                // if cards type match
+                const first = openCards[0].dataset.type;
+                const second = openCards[1].dataset.type;
+                if (first == second) {
+                    openCards[0].classList.add('match');
+                    openCards[1].classList.add('match');
                     openCards = [];
-                }, 1000);
+                } else {
+                    setTimeout(function(card) {
+                        // openCards.forEach(flipCard(card));
+                        openCards.forEach(function(card) {
+                            card.classList.remove('open', 'show');
+                        })
+                        openCards = [];
+                    }, 1000);
+                }
             }
 
         }
