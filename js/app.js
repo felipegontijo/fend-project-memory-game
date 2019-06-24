@@ -1,6 +1,19 @@
 /*
  * Create a list that holds all of your cards
 */
+const cardTypes = ['fa-diamond',        'fa-diamond',
+                    'fa-bolt',          'fa-bolt',
+                    'fa-leaf',          'fa-leaf',
+                    'fa-paper-plane-o', 'fa-paper-plane-o',
+                    'fa-cube',          'fa-cube',
+                    'fa-anchor',        'fa-anchor',
+                    'fa-bicycle',       'fa-bicycle',
+                    'fa-bomb',          'fa-bomb'];
+
+function generateCard (type) {
+    return `<li class="card" data-type="${type}"><i class="fa ${type}"></i></li>`;
+}
+
 
 /*
  * Display the cards on the page
@@ -38,7 +51,16 @@ function shuffle(array) {
 
 // get the entire deck of cards
 const deck = document.querySelector('.deck');
-console.log(deck);
+
+function beginGame (deck) {
+    let cardCode = cardTypes.map(function(type) {
+        return generateCard(type);
+    });
+    deck.innerHTML = cardCode.join('');
+}
+
+// sets the game up
+beginGame(deck);
 
 // create an array to hold the cards that are open
 let openCards = [];
@@ -49,19 +71,19 @@ function addToOpenCards (card) {
 }
 
 // flips the card
-function flipCard (card) {
-    // if target clicked isn't our li.card -- don't toggle open & show
-    if (!card.classList.contains('card')) return;
-    // card.classList.toggle('open');
-    // card.classList.toggle('show');
+// function flipCard (card) {
+//     // if target clicked isn't our li.card -- don't toggle open & show
+//     if (!card.classList.contains('card')) return;
+//     // card.classList.toggle('open');
+//     // card.classList.toggle('show');
 
-    if (!card.classList.contains('open') && !card.classList.contains('show')) {
-        card.classList.add('open', 'show');
-    } else {
-        card.classList.remove('open', 'show');
-    }
+//     if (!card.classList.contains('open') && !card.classList.contains('show')) {
+//         card.classList.add('open', 'show');
+//     } else {
+//         card.classList.remove('open', 'show');
+//     }
 
-}
+// }
 
 // adds an event listener to the deck
 deck.addEventListener('click', function(e) {
@@ -86,6 +108,7 @@ deck.addEventListener('click', function(e) {
                     openCards[1].classList.add('match');
                     openCards = [];
                 } else {
+                    // if do not match
                     setTimeout(function(card) {
                         // openCards.forEach(flipCard(card));
                         openCards.forEach(function(card) {
