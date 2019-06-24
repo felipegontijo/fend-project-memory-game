@@ -53,7 +53,7 @@ function shuffle(array) {
 const deck = document.querySelector('.deck');
 
 function beginGame (deck) {
-    let cardCode = cardTypes.map(function(type) {
+    let cardCode = shuffle(cardTypes).map(function(type) {
         return generateCard(type);
     });
     deck.innerHTML = cardCode.join('');
