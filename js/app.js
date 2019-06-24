@@ -1,26 +1,24 @@
-/*
- * Create a list that holds all of your cards
-*/
-const cardTypes = ['fa-diamond',        'fa-diamond',
-                    'fa-bolt',          'fa-bolt',
-                    'fa-leaf',          'fa-leaf',
-                    'fa-paper-plane-o', 'fa-paper-plane-o',
-                    'fa-cube',          'fa-cube',
-                    'fa-anchor',        'fa-anchor',
-                    'fa-bicycle',       'fa-bicycle',
-                    'fa-bomb',          'fa-bomb'];
+// hold all types of cards in the game
+const cardTypes = [
+    'fa-diamond',        'fa-diamond',
+    'fa-bolt',          'fa-bolt',
+    'fa-leaf',          'fa-leaf',
+    'fa-paper-plane-o', 'fa-paper-plane-o',
+    'fa-cube',          'fa-cube',
+    'fa-anchor',        'fa-anchor',
+    'fa-bicycle',       'fa-bicycle',
+    'fa-bomb',          'fa-bomb'
+];
 
+/**
+ * @description Generates the HTML code necessary to create one card of the game
+ * @param {string} type - The type of the card, e.g. fa-diamond, fa-bolt...
+ * @returns {string} The HTML code, in form of string literal, necessary to generate
+ *                      one card of the given type
+ */
 function generateCard (type) {
     return `<li class="card" data-type="${type}"><i class="fa ${type}"></i></li>`;
 }
-
-
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
-*/
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -37,21 +35,13 @@ function shuffle(array) {
     return array;
 }
 
-
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
-*/
-
-// get the entire deck of cards
+// get the deck element which holds the cards
 const deck = document.querySelector('.deck');
 
+/**
+ * @description Generates all cards of the game randomly
+ * @param {element} deck - The UL element which holds all the LI cards in the game
+ */
 function beginGame (deck) {
     let cardCode = shuffle(cardTypes).map(function(type) {
         return generateCard(type);
@@ -59,60 +49,87 @@ function beginGame (deck) {
     deck.innerHTML = cardCode.join('');
 }
 
+// start the game
 beginGame(deck);
 
-// create an array to hold the cards that are currently open
-let openCards = [];
+// hold the cards that are currently open -- but not matched
+const openCards = [];
 
-// add a card to the openCards array
+/**
+ * @description Pushes a card to the openCards array
+ * @param {element} card - The LI 'card' element
+ */
 function markAsOpen (card) {
     openCards.push(card);
 }
 
-function match (cardSet) {
-    cardSet.forEach(function(card) {
+/**
+ * @description Records a match by adding the 'match' class
+ *                  to each of the cards
+ * @param {array} cards - The pair of matched cards
+ */
+function recordMatch (cards) {
+    cards.forEach(function(card) {
         card.classList.add('match');
     });
 }
 
-function flipCard (card) {
+/**
+ * @description Flips a card
+ *                  - shows symbol if currently hidden
+ *                  - hides symbol if currently shown
+ * @param {element} card - The LI 'card' element
+ */
+function flip (card) {
     card.classList.toggle('open');
     card.classList.toggle('show');
 }
 
+// grab the element that shows the number of moves taken
 const moves = document.querySelector('.moves');
+
+// initialize moves counter
 let movesCounter = 0;
+
+/**
+ * @description Updates the HTML of the element of class 'moves'
+ * @param {number} movesCounter - The amount of moves taken thus far
+ * @returns The updated moves element
+ */
 function updateMoves (movesCounter) {
     return moves.innerHTML = `${movesCounter}`;
 }
 
-
-
 // add an event listener to the deck
 deck.addEventListener('click', function(e) {
+    // act only if clicked element is of desired type -- card
     if (e.target.classList.contains('card')) {
         const card = e.target;
+        // act only if clicked card is not open
         if (!card.classList.contains('open') && !card.classList.contains('show') && !card.classList.contains('match')) {
 
-            flipCard(card);
+            flip(card);
             markAsOpen(card);
 
             if (openCards.length === 2) {
-                // increment movesCounter & update number shown
+                // record move
                 movesCounter += 1;
                 updateMoves(movesCounter);
 
+                // get open cards' types
                 const firstCardType = openCards[0].dataset.type;
                 const secondCardType = openCards[1].dataset.type;
-                // if cards type match
+
+                // if cards' types match
                 if (firstCardType === secondCardType) {
-                    match(openCards);
+                    recordMatch(openCards);
+                    // empty the array of open cards
                     openCards = [];
                 } else {
-                    // if do not match
+                    // hide cards after one second
                     setTimeout(function() {
                         openCards.forEach(function(card) {
-                            flipCard(card);
+                            flip(card);
                         });
                         openCards = [];
                     }, 1000);
