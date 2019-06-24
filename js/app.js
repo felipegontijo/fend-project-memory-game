@@ -65,7 +65,7 @@ beginGame(deck);
 let openCards = [];
 
 // add a card to the openCards array
-function addToOpenCards (card) {
+function markAsOpen (card) {
     openCards.push(card);
 }
 
@@ -89,7 +89,7 @@ deck.addEventListener('click', function(e) {
         if (!card.classList.contains('open') && !card.classList.contains('show') && !card.classList.contains('match')) {
 
             flipCard(card);
-            openCards.push(card);
+            markAsOpen(card);
 
             if (openCards.length === 2) {
                 // increment movesCounter & update number shown
