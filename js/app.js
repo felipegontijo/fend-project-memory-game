@@ -69,20 +69,10 @@ function addToOpenCards (card) {
     openCards.push(card);
 }
 
-// flip the card
-// function flipCard (card) {
-//     // if target clicked isn't our li.card -- don't toggle open & show
-//     if (!card.classList.contains('card')) return;
-//     // card.classList.toggle('open');
-//     // card.classList.toggle('show');
-
-//     if (!card.classList.contains('open') && !card.classList.contains('show')) {
-//         card.classList.add('open', 'show');
-//     } else {
-//         card.classList.remove('open', 'show');
-//     }
-
-// }
+function flipCard (card) {
+    card.classList.toggle('open');
+    card.classList.toggle('show');
+}
 
 const moves = document.querySelector('.moves');
 let movesCounter = 0;
@@ -90,17 +80,15 @@ function updateMoves (movesCounter) {
     return moves.innerHTML = `${movesCounter}`;
 }
 
+
+
 // add an event listener to the deck
 deck.addEventListener('click', function(e) {
     if (e.target.classList.contains('card')) {
         const card = e.target;
         if (!card.classList.contains('open') && !card.classList.contains('show') && !card.classList.contains('match')) {
-            // flip the card
-            // flipCard(card);
-            // add to openCards
-            // addToOpenCards(card);
 
-            card.classList.add('open', 'show');
+            flipCard(card);
             openCards.push(card);
 
             if (openCards.length === 2) {
@@ -118,17 +106,24 @@ deck.addEventListener('click', function(e) {
                 } else {
                     // if do not match
                     setTimeout(function() {
-                        // openCards.forEach(flipCard(card));
                         openCards.forEach(function(card) {
-                            card.classList.remove('open', 'show');
-                        })
+                            flipCard(card);
+                        });
                         openCards = [];
                     }, 1000);
                 }
             }
-
-            // check to see if all cards have been matched
-
         }
     }
 });
+
+/*
+// check to see if all cards have been matched
+const cards = document.querySelectorAll('.card');
+let contains = cards.forEach(function(card) {
+    return card.classList.contains('match');
+});
+if (contains) {
+    alert('You won!');
+}
+*/
