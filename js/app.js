@@ -149,3 +149,11 @@ if (contains) {
     alert('You won!');
 }
 */
+
+/* TODO
+*
+*   win game condition & pop-up
+*   timer
+*   star rating
+*   restart button
+*/
