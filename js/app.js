@@ -69,6 +69,12 @@ function markAsOpen (card) {
     openCards.push(card);
 }
 
+function match (cardSet) {
+    cardSet.forEach(function(card) {
+        card.classList.add('match');
+    });
+}
+
 function flipCard (card) {
     card.classList.toggle('open');
     card.classList.toggle('show');
@@ -96,12 +102,11 @@ deck.addEventListener('click', function(e) {
                 movesCounter += 1;
                 updateMoves(movesCounter);
 
-                const firstCard = openCards[0].dataset.type;
-                const secondCard = openCards[1].dataset.type;
+                const firstCardType = openCards[0].dataset.type;
+                const secondCardType = openCards[1].dataset.type;
                 // if cards type match
-                if (firstCard == secondCard) {
-                    openCards[0].classList.add('match');
-                    openCards[1].classList.add('match');
+                if (firstCardType === secondCardType) {
+                    match(openCards);
                     openCards = [];
                 } else {
                     // if do not match
