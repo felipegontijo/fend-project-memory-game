@@ -1,4 +1,27 @@
-// hold all types of cards in the game
+/*
+ *   Global variables
+ *
+ */
+
+// references to elements
+const deck = document.querySelector('.deck');
+const timer = document.querySelector('.timer');
+const moves = document.querySelector('.moves');
+
+// variables to be used by the timer
+let seconds = 0;
+let minutes = 0;
+let interval;
+
+// count moves
+let movesCounter = 0;
+// count pairs moved (moves / 2)
+let pairsMoved = 0;
+
+// hold the cards that are currently open -- and not matched
+let openCards = [];
+
+// hold all the different types of cards in the game
 const cardTypes = [
     'fa-diamond',        'fa-diamond',
     'fa-bolt',          'fa-bolt',
@@ -10,17 +33,28 @@ const cardTypes = [
     'fa-bomb',          'fa-bomb'
 ];
 
+/*
+ *
+ *   Functions / Handlers
+ *
+ *
+ */
+
 /**
  * @description Generates the HTML code necessary to create one card of the game
- * @param {string} type - The type of the card, e.g. fa-diamond, fa-bolt...
+ * @param {string} type - The type/symbol of the card, e.g. fa-diamond, fa-bolt...
  * @returns {string} The HTML code, in form of string literal, necessary to generate
- *                      one card of the given type
+ *                   one card of the given type
  */
 function generateCard (type) {
     return `<li class="card" data-type="${type}"><i class="fa ${type}"></i></li>`;
 }
 
-// Shuffle function from http://stackoverflow.com/a/2450976
+/**
+ * @description Shuffle function from http://stackoverflow.com/a/2450976
+ * @param {array} array - The array to be shuffled
+ * @returns {array} The shuffled array
+*/
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -35,11 +69,10 @@ function shuffle(array) {
     return array;
 }
 
-let seconds = 0;
-let minutes = 0;
-let interval;
-const timer = document.querySelector('.timer');
-
+/**
+ * @description Sets a timer, keeping track of the time in seconds
+ *              and minutes accordingly
+ */
 function setTimer () {
     interval = setInterval(function() {
         seconds += 1;
@@ -52,27 +85,26 @@ function setTimer () {
     }, 1000);
 }
 
-
-// get the deck element which holds the cards
-const deck = document.querySelector('.deck');
-
 /**
  * @description Generates all cards of the game randomly
  * @param {element} deck - The UL element which holds all the LI cards in the game
+ *
  */
 function beginGame (deck) {
+    // reset the deck
     deck.innerHTML = '';
+    // shuffle and generate new cards
     let cardHTML = shuffle(cardTypes).map(function(type) {
         return generateCard(type);
     });
+    // attach cards to deck
     deck.innerHTML = cardHTML.join('');
+    // reset timer
+    clearInterval(interval);
 }
 
-// start the game
+// START THE GAME
 beginGame(deck);
-
-// hold the cards that are currently open -- and not matched
-let openCards = [];
 
 /**
  * @description Pushes a card to the openCards array
@@ -84,7 +116,7 @@ function markAsOpen (card) {
 
 /**
  * @description Records a match by adding the 'match' class
- *                  to each of the cards
+ *              to each of the cards
  * @param {array} cards - The pair of matched cards
  */
 function recordMatch (cards) {
@@ -104,13 +136,6 @@ function flip (card) {
     card.classList.toggle('show');
 }
 
-// grab the element that shows the number of moves taken
-const moves = document.querySelector('.moves');
-
-// count moves
-let movesCounter = 0;
-// count pairs moved (moves / 2)
-let pairsMoved = 0;
 
 /**
  * @description Updates the HTML of the element of class 'moves'
@@ -184,7 +209,6 @@ deck.addEventListener('click', function(e) {
 /* TODO
 *
 *   win game condition & pop-up
-*   timer
 *   star rating
 *   restart button
 */
