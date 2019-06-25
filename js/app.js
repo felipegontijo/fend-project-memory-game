@@ -7,21 +7,25 @@
 const deck = document.querySelector('.deck');
 const timer = document.querySelector('.timer');
 const moves = document.querySelector('.moves');
+const firstStar = document.querySelector('#first-star');
+const secondStar = document.querySelector('#second-star');
+const thirdStar = document.querySelector('#third-star');
 
-// variables to be used by the timer
+// timer variables
 let seconds = 0;
 let minutes = 0;
 let interval;
 
 // count moves
 let movesCounter = 0;
+
 // count pairs moved (moves / 2)
 let pairsMoved = 0;
 
-// hold the cards that are currently open -- and not matched
+// hold the cards that are currently open -- but not matched
 let openCards = [];
 
-// hold all the different types of cards in the game
+// hold all the different types of cards (symbols) in the game
 const cardTypes = [
     'fa-diamond',        'fa-diamond',
     'fa-bolt',          'fa-bolt',
@@ -86,27 +90,6 @@ function setTimer () {
 }
 
 /**
- * @description Generates all cards of the game randomly
- * @param {element} deck - The UL element which holds all the LI cards in the game
- *
- */
-function beginGame (deck) {
-    // reset the deck
-    deck.innerHTML = '';
-    // shuffle and generate new cards
-    let cardHTML = shuffle(cardTypes).map(function(type) {
-        return generateCard(type);
-    });
-    // attach cards to deck
-    deck.innerHTML = cardHTML.join('');
-    // reset timer
-    clearInterval(interval);
-}
-
-// START THE GAME
-beginGame(deck);
-
-/**
  * @description Pushes a card to the openCards array
  * @param {element} card - The LI 'card' element
  */
@@ -146,23 +129,51 @@ function updateMoves (movesCounter) {
     return moves.innerHTML = `${movesCounter}`;
 }
 
-// keep track of matches
-// let pairsMatched = 0;
+/**
+ * @description Generates all cards of the game randomly
+ * @param {element} deck - The UL element which holds all the LI cards in the game
+ *
+ */
+function beginGame (deck) {
+    // reset the deck
+    deck.innerHTML = '';
 
-// function displayWin () {
-//     alert('You won!');
-// }
+    // shuffle and generate new cards
+    let cardHTML = shuffle(cardTypes).map(function(type) {
+        return generateCard(type);
+    });
+    // attach cards to deck
+    deck.innerHTML = cardHTML.join('');
 
-// add an event listener to the deck
+    // reset timer
+    clearInterval(interval);
+
+}
+
+// START THE GAME
+beginGame(deck);
+
+// listen for clicks on cards
 deck.addEventListener('click', function(e) {
     // act only if clicked element is of desired type -- card
     if (e.target.classList.contains('card')) {
         const card = e.target;
+
+        // set the timer on first move
         if (movesCounter === 0) {
             seconds = 0;
             minutes = 0;
             setTimer();
         }
+
+        // control stars rating based on moves taken
+        if (pairsMoved >= 12) {
+            thirdStar.remove();
+        }
+        if (pairsMoved >= 18) {
+            secondStar.remove();
+        }
+
         // act only if clicked card is not open
         if (!card.classList.contains('open') && !card.classList.contains('show') && !card.classList.contains('match')) {
 
@@ -199,9 +210,6 @@ deck.addEventListener('click', function(e) {
             }
         }
     }
-    // if (pairsMatched === 8) {
-    //     setTimeout(displayWin(), 2000);
-    // }
 });
 
 
@@ -212,3 +220,18 @@ deck.addEventListener('click', function(e) {
 *   star rating
 *   restart button
 */
+
+
+
+
+
+// keep track of matches
+// let pairsMatched = 0;
+
+// function displayWin () {
+//     alert('You won!');
+// }
+
+// if (pairsMatched === 8) {
+//     setTimeout(displayWin(), 2000);
+// }
