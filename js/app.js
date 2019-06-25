@@ -10,6 +10,7 @@ const moves = document.querySelector('.moves');
 const firstStar = document.querySelector('#first-star');
 const secondStar = document.querySelector('#second-star');
 const thirdStar = document.querySelector('#third-star');
+const restart = document.querySelector('.restart');
 
 // timer variables
 let seconds = 0;
@@ -142,16 +143,27 @@ function beginGame (deck) {
     let cardHTML = shuffle(cardTypes).map(function(type) {
         return generateCard(type);
     });
-    // attach cards to deck
+    // attach new cards to deck
     deck.innerHTML = cardHTML.join('');
 
     // reset timer
     clearInterval(interval);
+    timer.innerHTML = '';
 
+    // reset moves
+    movesCounter = 0;
+    pairsMoved = 0;
+    updateMoves(0);
 }
 
 // START THE GAME
 beginGame(deck);
+
+restart.addEventListener('click', function(e) {
+    let restartButton = e.target.closest('div.restart');
+    if (!restartButton) return;
+    beginGame(deck);
+})
 
 // listen for clicks on cards
 deck.addEventListener('click', function(e) {
@@ -217,7 +229,6 @@ deck.addEventListener('click', function(e) {
 /* TODO
 *
 *   win game condition & pop-up
-*   restart button
 *
 */
 
