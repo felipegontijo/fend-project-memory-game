@@ -217,8 +217,8 @@ deck.addEventListener('click', function(e) {
 /* TODO
 *
 *   win game condition & pop-up
-*   star rating
 *   restart button
+*
 */
 
 
