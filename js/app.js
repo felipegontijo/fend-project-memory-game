@@ -61,10 +61,11 @@ const deck = document.querySelector('.deck');
  * @param {element} deck - The UL element which holds all the LI cards in the game
  */
 function beginGame (deck) {
-    let cardCode = shuffle(cardTypes).map(function(type) {
+    deck.innerHTML = '';
+    let cardHTML = shuffle(cardTypes).map(function(type) {
         return generateCard(type);
     });
-    deck.innerHTML = cardCode.join('');
+    deck.innerHTML = cardHTML.join('');
 }
 
 // start the game
@@ -120,7 +121,7 @@ function updateMoves (movesCounter) {
     return moves.innerHTML = `${movesCounter}`;
 }
 
-// // keep track of matches
+// keep track of matches
 // let pairsMatched = 0;
 
 // function displayWin () {
@@ -158,7 +159,7 @@ deck.addEventListener('click', function(e) {
                 if (firstCardType === secondCardType) {
                     recordMatch(openCards);
                     // increment match counter
-                    pairsMatched += 1;
+                    // pairsMatched += 1;
                     // empty the array of open cards
                     openCards = [];
                 } else {
@@ -170,7 +171,6 @@ deck.addEventListener('click', function(e) {
                         openCards = [];
                     }, 1000);
                 }
-
             }
         }
     }
@@ -180,16 +180,6 @@ deck.addEventListener('click', function(e) {
 });
 
 
-/*
-// check to see if all cards have been matched
-const cards = document.querySelectorAll('.card');
-let contains = cards.forEach(function(card) {
-    return card.classList.contains('match');
-});
-if (contains) {
-    alert('You won!');
-}
-*/
 
 /* TODO
 *
