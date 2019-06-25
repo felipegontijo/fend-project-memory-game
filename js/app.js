@@ -35,6 +35,24 @@ function shuffle(array) {
     return array;
 }
 
+let seconds = 0;
+let minutes = 0;
+let interval;
+const timer = document.querySelector('.timer');
+
+function setTimer () {
+    interval = setInterval(function() {
+        seconds += 1;
+        if (seconds === 60) {
+            minutes += 1;
+            seconds = 0;
+        }
+        // update timer display
+        timer.innerHTML = `${minutes} minutes and ${seconds} seconds`;
+    }, 1000);
+}
+
+
 // get the deck element which holds the cards
 const deck = document.querySelector('.deck');
 
@@ -52,7 +70,7 @@ function beginGame (deck) {
 // start the game
 beginGame(deck);
 
-// hold the cards that are currently open -- but not matched
+// hold the cards that are currently open -- and not matched
 let openCards = [];
 
 /**
@@ -88,8 +106,10 @@ function flip (card) {
 // grab the element that shows the number of moves taken
 const moves = document.querySelector('.moves');
 
-// initialize moves counter
+// count moves
 let movesCounter = 0;
+// count pairs moved (moves / 2)
+let pairsMoved = 0;
 
 /**
  * @description Updates the HTML of the element of class 'moves'
@@ -100,21 +120,35 @@ function updateMoves (movesCounter) {
     return moves.innerHTML = `${movesCounter}`;
 }
 
+// // keep track of matches
+// let pairsMatched = 0;
+
+// function displayWin () {
+//     alert('You won!');
+// }
+
 // add an event listener to the deck
 deck.addEventListener('click', function(e) {
     // act only if clicked element is of desired type -- card
     if (e.target.classList.contains('card')) {
         const card = e.target;
+        if (movesCounter === 0) {
+            seconds = 0;
+            minutes = 0;
+            setTimer();
+        }
         // act only if clicked card is not open
         if (!card.classList.contains('open') && !card.classList.contains('show') && !card.classList.contains('match')) {
 
             flip(card);
             markAsOpen(card);
+            // TODO: prevent user from clicking on three cards
+            movesCounter += 1;
 
             if (openCards.length === 2) {
                 // record move
-                movesCounter += 1;
-                updateMoves(movesCounter);
+                pairsMoved = movesCounter/2;
+                updateMoves(pairsMoved);
 
                 // get open cards' types
                 const firstCardType = openCards[0].dataset.type;
@@ -123,6 +157,8 @@ deck.addEventListener('click', function(e) {
                 // if cards' types match
                 if (firstCardType === secondCardType) {
                     recordMatch(openCards);
+                    // increment match counter
+                    pairsMatched += 1;
                     // empty the array of open cards
                     openCards = [];
                 } else {
@@ -134,10 +170,15 @@ deck.addEventListener('click', function(e) {
                         openCards = [];
                     }, 1000);
                 }
+
             }
         }
     }
+    // if (pairsMatched === 8) {
+    //     setTimeout(displayWin(), 2000);
+    // }
 });
+
 
 /*
 // check to see if all cards have been matched
