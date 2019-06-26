@@ -11,6 +11,7 @@ const firstStar = document.querySelector('#first-star');
 const secondStar = document.querySelector('#second-star');
 const thirdStar = document.querySelector('#third-star');
 const restart = document.querySelector('.restart');
+const modal = document.querySelector('.modal');
 
 // timer variables
 let seconds = 0;
@@ -25,6 +26,9 @@ let pairsMoved = 0;
 
 // hold the cards that are currently open -- but not matched
 let openCards = [];
+
+// keep track of pairs matched
+let pairsMatched = 0;
 
 // hold all the different types of cards (symbols) in the game
 const cardTypes = [
@@ -154,10 +158,43 @@ function beginGame (deck) {
     movesCounter = 0;
     pairsMoved = 0;
     updateMoves(0);
+
+    // reset matches
+    pairsMatched = 0;
+
+    // reset rating
+    thirdStar.style.display = 'inline-block';
+    secondStar.style.display = 'inline-block';
 }
 
 // START THE GAME
 beginGame(deck);
+
+function displayWin () {
+    // stop timer and get it
+    clearInterval(interval);
+    const finalTime = timer.innerHTML;
+
+    // get current stars
+    const rating = document.querySelector('.stars').innerHTML;
+
+    // get number of moves
+    const totalMoves = document.querySelector('.moves').innerHTML;
+
+    // set rating, timer, and moves
+    document.querySelector('.stats--stars').innerHTML = rating;
+    document.querySelector('.stats--timer').innerHTML = finalTime;
+    document.querySelector('.stats--moves').innerHTML = totalMoves;
+
+    // display the modal
+    modal.style.display = 'block';
+
+    // listen for replay
+    document.querySelector('.stats--restart').addEventListener('click', function(e) {
+        modal.style.display = 'none';
+        beginGame(deck);
+    })
+}
 
 restart.addEventListener('click', function(e) {
     let restartButton = e.target.closest('div.restart');
@@ -180,10 +217,10 @@ deck.addEventListener('click', function(e) {
 
         // control stars rating based on moves taken
         if (pairsMoved >= 12) {
-            thirdStar.remove();
+            thirdStar.style.display = 'none';
         }
         if (pairsMoved >= 18) {
-            secondStar.remove();
+            secondStar.style.display = 'none';
         }
 
         // act only if clicked card is not open
@@ -207,7 +244,7 @@ deck.addEventListener('click', function(e) {
                 if (firstCardType === secondCardType) {
                     recordMatch(openCards);
                     // increment match counter
-                    // pairsMatched += 1;
+                    pairsMatched += 1;
                     // empty the array of open cards
                     openCards = [];
                 } else {
@@ -218,6 +255,10 @@ deck.addEventListener('click', function(e) {
                         });
                         openCards = [];
                     }, 1000);
+                }
+                // check if all cards have been matched
+                if (pairsMatched === 8) {
+                    displayWin();
                 }
             }
         }
@@ -231,18 +272,3 @@ deck.addEventListener('click', function(e) {
 *   win game condition & pop-up
 *
 */
-
-
-
-
-
-// keep track of matches
-// let pairsMatched = 0;
-
-// function displayWin () {
-//     alert('You won!');
-// }
-
-// if (pairsMatched === 8) {
-//     setTimeout(displayWin(), 2000);
-// }
