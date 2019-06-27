@@ -272,6 +272,5 @@ deck.addEventListener('click', function(e) {
 
 /* TODO
 *
-*   prevent user from clicking on three cards
 *   polish styling
 */
