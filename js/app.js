@@ -44,7 +44,7 @@ const cardTypes = [
 
 /*
  *
- *   Functions / Handlers
+ *   Functions / Listeners
  *
  *
  */
@@ -269,6 +269,7 @@ deck.addEventListener('click', function(e) {
 
 /* TODO
 *
-*   win game condition & pop-up
-*
+*   prevent user from clicking on three cards
+*   decrease time cards show for
+*   polish styling
 */
