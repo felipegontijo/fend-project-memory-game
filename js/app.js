@@ -270,6 +270,5 @@ deck.addEventListener('click', function(e) {
 /* TODO
 *
 *   prevent user from clicking on three cards
-*   decrease time cards show for
 *   polish styling
 */
