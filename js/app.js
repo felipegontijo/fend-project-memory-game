@@ -254,7 +254,7 @@ deck.addEventListener('click', function(e) {
                             flip(card);
                         });
                         openCards = [];
-                    }, 1000);
+                    }, 500);
                 }
                 // check if all cards have been matched
                 if (pairsMatched === 8) {
