@@ -280,10 +280,3 @@ deck.addEventListener('click', function(e) {
         }
     }
 });
-
-
-
-/* TODO
-*
-*   polish styling
-*/
