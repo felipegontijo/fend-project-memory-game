@@ -80,7 +80,8 @@ function shuffle(array) {
 
 /**
  * @description Sets a timer, keeping track of the time in seconds
- *              and minutes accordingly
+ *              and minutes accordingly, and updates the timer
+ *              displayed on the page
  */
 function setTimer () {
     interval = setInterval(function() {
@@ -104,7 +105,7 @@ function markAsOpen (card) {
 
 /**
  * @description Records a match by adding the 'match' class
- *              to each of the cards
+ *              to each of the matched cards
  * @param {array} cards - The pair of matched cards
  */
 function recordMatch (cards) {
@@ -114,7 +115,7 @@ function recordMatch (cards) {
 }
 
 /**
- * @description Flips a card
+ * @description Flips a card, i.e.:
  *                  - shows symbol if currently hidden
  *                  - hides symbol if currently shown
  * @param {element} card - The LI 'card' element
@@ -126,16 +127,18 @@ function flip (card) {
 
 
 /**
- * @description Updates the HTML of the element of class 'moves'
+ * @description Updates the number of moves displayed
  * @param {number} movesCounter - The amount of moves taken thus far
- * @returns The updated moves element
+ *
  */
 function updateMoves (movesCounter) {
-    return moves.innerHTML = `${movesCounter}`;
+    moves.innerHTML = `${movesCounter}`;
 }
 
 /**
- * @description Generates all cards of the game randomly
+ * @description Begins the game by setting all the necessary conditions,
+ *              resetting the deck with new cards, the timer,
+ *              the amount of moves, the rating, and the matches counter
  * @param {element} deck - The UL element which holds all the LI cards in the game
  *
  */
@@ -170,15 +173,21 @@ function beginGame (deck) {
 // START THE GAME
 beginGame(deck);
 
+/**
+ * @description Displays the win-game modal, providing the user
+ *              with their rating, the time they took, and
+ *              how many moves they made
+ *
+ */
 function displayWin () {
-    // stop timer and get it
+    // stop timer; get the user's time
     clearInterval(interval);
     const finalTime = timer.innerHTML;
 
-    // get current stars
+    // get rating
     const rating = document.querySelector('.stars').innerHTML;
 
-    // get number of moves
+    // get the number of moves made
     const totalMoves = document.querySelector('.moves').innerHTML;
 
     // set rating, timer, and moves
@@ -189,23 +198,29 @@ function displayWin () {
     // display the modal
     modal.style.display = 'block';
 
-    // listen for replay
+    // listen for 'Play Again' option
     document.querySelector('.stats--restart').addEventListener('click', function(e) {
         modal.style.display = 'none';
         beginGame(deck);
     })
 }
 
+// listen for in-game 'restart' option
 restart.addEventListener('click', function(e) {
+    // deals with click on <i> and its <div> parent
     let restartButton = e.target.closest('div.restart');
+
+    // do nothing if click wasn't on desired elements
     if (!restartButton) return;
+
+    // begin game otherwise
     beginGame(deck);
 })
 
 // listen for clicks on cards
 deck.addEventListener('click', function(e) {
     //prevent user from clicking on a third card
-    if (openCards.length == 2) return;
+    if (openCards.length === 2) return;
 
     // act only if clicked element is of desired type -- card
     if (e.target.classList.contains('card')) {
@@ -231,7 +246,6 @@ deck.addEventListener('click', function(e) {
 
             flip(card);
             markAsOpen(card);
-            // TODO: prevent user from clicking on three cards
             movesCounter += 1;
 
             if (openCards.length === 2) {
@@ -239,19 +253,18 @@ deck.addEventListener('click', function(e) {
                 pairsMoved = movesCounter/2;
                 updateMoves(pairsMoved);
 
-                // get open cards' types
+                // get open cards' types (symbols)
                 const firstCardType = openCards[0].dataset.type;
                 const secondCardType = openCards[1].dataset.type;
 
                 // if cards' types match
                 if (firstCardType === secondCardType) {
                     recordMatch(openCards);
-                    // increment match counter
                     pairsMatched += 1;
                     // empty the array of open cards
                     openCards = [];
                 } else {
-                    // hide cards after one second
+                    // hide cards
                     setTimeout(function() {
                         openCards.forEach(function(card) {
                             flip(card);
