@@ -204,6 +204,9 @@ restart.addEventListener('click', function(e) {
 
 // listen for clicks on cards
 deck.addEventListener('click', function(e) {
+    //prevent user from clicking on a third card
+    if (openCards.length == 2) return;
+
     // act only if clicked element is of desired type -- card
     if (e.target.classList.contains('card')) {
         const card = e.target;
