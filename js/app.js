@@ -165,6 +165,9 @@ function beginGame (deck) {
     // reset matches
     pairsMatched = 0;
 
+    // reset open cards array
+    openCards = [];
+
     // reset rating
     thirdStar.style.display = 'inline-block';
     secondStar.style.display = 'inline-block';
