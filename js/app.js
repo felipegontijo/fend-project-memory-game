@@ -31,16 +31,8 @@ let openCards = [];
 let pairsMatched = 0;
 
 // hold all the different types of cards (symbols) in the game
-const cardTypes = [
-    'fa-diamond',        'fa-diamond',
-    'fa-bolt',          'fa-bolt',
-    'fa-leaf',          'fa-leaf',
-    'fa-paper-plane-o', 'fa-paper-plane-o',
-    'fa-cube',          'fa-cube',
-    'fa-anchor',        'fa-anchor',
-    'fa-bicycle',       'fa-bicycle',
-    'fa-bomb',          'fa-bomb'
-];
+const icons = ['fa-diamond', 'fa-bolt', 'fa-leaf', 'fa-paper-plane-o', 'fa-cube', 'fa-anchor', 'fa-bicycle', 'fa-bomb'];
+const symbols = [...icons,...icons];
 
 /*
  *
@@ -65,7 +57,7 @@ function generateCard (type) {
  * @returns {array} The shuffled array
 */
 function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
+    let currentIndex = array.length, temporaryValue, randomIndex;
 
     while (currentIndex !== 0) {
         randomIndex = Math.floor(Math.random() * currentIndex);
@@ -147,7 +139,7 @@ function beginGame (deck) {
     deck.innerHTML = '';
 
     // shuffle and generate new cards
-    let cardHTML = shuffle(cardTypes).map(function(type) {
+    let cardHTML = shuffle(symbols).map(function(type) {
         return generateCard(type);
     });
     // attach new cards to deck
